@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="js/jquery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="layer/layer.js"></script>
+    <script src="laypage/laypage.js"></script>
+</head>
+<body>
+    <!-- Main content -->
+    <section class="content" id="content">
+        <div>
+            <h1>VUE-EXAMPLE-V0.1</h1>
+            <h2>如果数据是可变的就必须使用v-model来进行数据的绑定（如：form表单，select,checkbox等）,原因是变化的数据发生变化后，VUE会重新再生成</h2>
+            <h2><a href="http://cn.vuejs.org/v2/guide/forms.html">VUE-所有的表单控件绑定必须使用v-model</a></h2>
+        </div>
+        <br />
+        <div>$('#productId').paramObject()--用于处理产品详情页请求是一个参数的解决方案【productId=1】</div>
+        <input type="hidden" id="productId" name="productId" value="1" />
+        <br />
+        <div>
+            <div>下拉框</div>
+            <div>通过v-model进行双向绑定|:href="url"或v-bind:href="url"是单向绑定可以通过control来查看</div>
+            <select class="select2" style="width: 15rem;" v-model="searchObj.teamId">
+                <option value="0">全部</option>
+                <option v-for="item in teams" value="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <br />
+        <div>
+            <form id="simpleCheckBoxForm">
+                简单的checkbox-($('#simpleCheckBoxForm').serialize())<br />
+                <label><input type="checkbox" name="Fruit" :checked="checkBoxValSimple">苹果 </label>
+            </form>
+        </div>
+        <br />
+        <div>
+            <form id="checkBoxForm">
+                您喜欢的水果?($('#checkBoxForm').serialize())<br />
+                checkValArr是通过computed生成缓存同时checkValArr与checkBoxVal做了关联-checkbox类型建议不要使用v-model作双绑定<br />
+                <label><input name="FruitCheckBox" type="checkbox" value="1" v-model="checkboxs" :checked="bindCheckBox(1)" />苹果 </label>
+                <label><input name="FruitCheckBox" type="checkbox" value="2" v-model="checkboxs" :checked="bindCheckBox(2)" />桃子 </label>
+                <label><input name="FruitCheckBox" type="checkbox" value="3" v-model="checkboxs" :checked="bindCheckBox(3)" />香蕉 </label>
+                <label><input name="FruitCheckBox" type="checkbox" value="4" v-model="checkboxs" :checked="bindCheckBox(4)" />梨 </label>
+            </form>
+        </div>
+        <br />
+        <div>
+            <form id="radioForm">
+                您最喜欢水果？($('#radioForm').serialize())<br /><br />
+                <label><input id="apple" name="FruitRadio" type="radio" value="11" v-model="radioVal" />苹果 </label>
+                <label><input name="FruitRadio" type="radio" value="22" v-model="radioVal" />桃子 </label>
+                <label><input name="FruitRadio" type="radio" value="33" v-model="radioVal" />香蕉 </label>
+                <label><input name="FruitRadio" type="radio" value="44" v-model="radioVal" />梨 </label>
+                <label><input name="FruitRadio" type="radio" value="55" v-model="radioVal" />其它 </label>
+            </form>
+        </div>
+        <br />
+        <div>
+            <h1>Table</h1>
+            <!--表格内容-->
+            <div class="row">
+                <table id="orderlist_table" class="table table-bordered table-hover dataTable"
+                       role="grid" aria-describedby="orderlist_table_info">
+                    <thead>
+                        <tr role="row">
+                            <th>员工姓名</th>
+                            <th>手机号</th>
+                            <th>员工级别</th>
+                            <th>所属部门</th>
+                            <th>所属团队</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <template v-for="item in employees">
+                            <tr>
+                                <td>{{item.name}}</td>
+                                <td>{{item.mobile}}</td>
+                                <td>{{item.rankName}}</td>
+                                <td>{{item.departmentName}}</td>
+                                <td>{{item.teamName}}</td>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-default btn-xs"
+                                       role="button" @click="openEditForm(item.id)">修改</a>
+                                    <a href="javascript:;" class="btn btn-default btn-xs remove-msg"
+                                       role="button" @click="openDeleteForm(item.id)">删除</a>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 pagination">
+                    <div id="pageNum"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br />
+    <div>弹出框</div>
+    <div>[data: openVmModel]给data赋值model时一定要使用的根节点的对象</div>
+    <div>
+        <!--提示框-->
+        <!--添加-->
+        <div id="addTemplate">
+            <form></form>
+        </div>
+        <!--修改-->
+        <div id="editTemplate">
+            <form>
+                <table>
+                    <tr>
+                        <td>name</td>
+                        <td>
+                            <input type="text" :value="bindCheckBox()" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>select-one</td>
+                        <td>
+                            <select class="select2" style="width: 15rem;" v-model="teamIdSelected">
+                            <option value="0">全部</option>
+                            <option v-for="item in teams" value="item.id">{{ item.name }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <!--删除-->
+        <div id="deleteTemplate">
+            <form></form>
+        </div>
+    </div>
+    <script src="index.js" charset="utf-8"></script>
+</body>
+</html>
